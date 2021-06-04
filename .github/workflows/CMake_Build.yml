@@ -22,14 +22,10 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install libjsoncpp-dev
       
       - name: Setup Ninja
         uses: ashutoshvarma/setup-ninja@master
-      
-      - name: mkdir
-        run: mkdir build
-      
+
       - name: Run CMake
         run: |
           cmake -S . -B build -G Ninja -D CMAKE_MAKE_PROGRAM=ninja
