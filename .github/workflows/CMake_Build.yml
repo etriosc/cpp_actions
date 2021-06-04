@@ -4,10 +4,6 @@ name: CMake Build
 
 # Controls when the action will run. 
 on: [push, pull_request]
-
-env:
-  CMAKE_VERSION: 3.18.3
-  NINJA_VERSION: 1.10.1
   
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -26,31 +22,19 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
+          sudo apt-get install libjsoncpp-dev
       
       - name: Setup Ninja
         uses: ashutoshvarma/setup-ninja@master
-        
+      
+      - name: mkdir
+        run: mkdir build
+      
       - name: Run CMake
         run: |
-          execute_process(COMMAND cmake -S . -B build -G Ninja -D CMAKE_MAKE_PROGRAM=ninja RESULT_VARIABLE result)
-          if (NOT result EQUAL 0)
-            message(FATAL_ERROR "Bad exit status")
-          endif()
+          cmake -S . -B build -G Ninja -D CMAKE_MAKE_PROGRAM=ninja
+          cmake --build build -j 2
           
-          execute_process(
-            COMMAND cmake --build build -j 2
-            RESULT_VARIABLE result
-            OUTPUT_VARIABLE output
-            ERROR_VARIABLE output
-            ECHO_OUTPUT_VARIABLE ECHO_ERROR_VARIABLE
-          )
-          if (NOT result EQUAL 0)
-            string(REGEX MATCH "FAILED:.*$" error_message "${output}")
-            string(REPLACE "\n" "%0A" error_message "${error_message}")
-            message("::error::${error_message}")
-            message(FATAL_ERROR "Build failed")
-          endif()
-        
       # Runs a single command using the runners shell
       #- name: Run a one-line script
       #  run: echo Hello, world!
