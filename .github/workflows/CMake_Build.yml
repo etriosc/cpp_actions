@@ -33,11 +33,7 @@ jobs:
       - name: Run CMake
         run: |
           execute_process(
-            COMMAND cmake 
-              -S . 
-              -B build 
-              -G Ninja
-              -D CMAKE_MAKE_PROGRAM=ninja
+            COMMAND cmake -S . -B build -G Ninja -D CMAKE_MAKE_PROGRAM=ninja
             RESULT_VARIABLE result
           )
           if (NOT result EQUAL 0)
