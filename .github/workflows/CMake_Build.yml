@@ -33,12 +33,17 @@ jobs:
       - name: Run CMake
         run: |
           execute_process(
-            COMMAND cmake -S . -B build -G Ninja
+            COMMAND cmake 
+              -S . 
+              -B build 
+              -G Ninja
+              -D CMAKE_MAKE_PROGRAM=ninja
             RESULT_VARIABLE result
           )
           if (NOT result EQUAL 0)
             message(FATAL_ERROR "Bad exit status")
           endif()
+          
           execute_process(
             COMMAND cmake --build build -j 2
             RESULT_VARIABLE result
