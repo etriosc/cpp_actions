@@ -32,9 +32,27 @@ jobs:
         
       - name: Run CMake
         run: |
-          cmake -S . -B build -G Ninja
-          cmake --build build -j 2
-          
+          execute_process(
+            COMMAND cmake -S . -B build -G Ninja
+            RESULT_VARIABLE result
+          )
+          if (NOT result EQUAL 0)
+            message(FATAL_ERROR "Bad exit status")
+          endif()
+          execute_process(
+            COMMAND cmake --build build -j 2
+            RESULT_VARIABLE result
+            OUTPUT_VARIABLE output
+            ERROR_VARIABLE output
+            ECHO_OUTPUT_VARIABLE ECHO_ERROR_VARIABLE
+          )
+          if (NOT result EQUAL 0)
+            string(REGEX MATCH "FAILED:.*$" error_message "${output}")
+            string(REPLACE "\n" "%0A" error_message "${error_message}")
+            message("::error::${error_message}")
+            message(FATAL_ERROR "Build failed")
+          endif()
+        
       # Runs a single command using the runners shell
       #- name: Run a one-line script
       #  run: echo Hello, world!
