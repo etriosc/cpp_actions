@@ -22,9 +22,6 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-      
-      - name: Setup Ninja
-        uses: ashutoshvarma/setup-ninja@master
 
       - name: Run CMake
         run: |
