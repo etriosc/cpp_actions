@@ -30,3 +30,9 @@ jobs:
       
       - name: Run test
         run: build/main
+      
+      - name: Upload
+        uses: actions/upload-artifact@v1
+        with:
+          name: upload binary
+          path: build/main
