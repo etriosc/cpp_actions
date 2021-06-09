@@ -22,4 +22,5 @@ jobs:
           cmake --build build -j 2
       
       - name: Run test
-        run: build/main
+        #run: build/main
+        run: ctest -C Release
