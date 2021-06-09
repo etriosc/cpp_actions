@@ -19,8 +19,9 @@ jobs:
       - name: Run CMake
         run: |
           cmake -S . -B build
-          cmake --build build -j 2
+          cmake --build build -j 2 --config Release
       
       - name: Run test
         #run: build/main
-        run: ctest -C build/main
+        working-directory: build
+        run: ctest -C Release
