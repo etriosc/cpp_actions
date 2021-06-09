@@ -2,8 +2,11 @@ name: CMake Build
 
 on: [push, pull_request]
 
+env:
+  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+  BUILD_TYPE: Release
+  
 jobs:
-
   build-and-test:
     name: Build and Test
     runs-on: ubuntu-latest
@@ -18,10 +21,10 @@ jobs:
 
       - name: Run CMake
         run: |
-          cmake -S . -B build
-          cmake --build build -j 2 --config Release
+          cmake -S . -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+          cmake --build ${{github.workspace}}/build -j 2 --config ${{env.BUILD_TYPE}}
       
       - name: Run test
         #run: build/main
-        working-directory: build
-        run: ctest -C Release
+        working-directory: ${{github.workspace}}/build
+        run: ctest -C ${{env.BUILD_TYPE}}
